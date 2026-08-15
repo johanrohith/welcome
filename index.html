@@ -203,22 +203,6 @@ function dontChoose() {
     }
   }
 }
-const credit = document.getElementById("credit");
-let creditClicks = 0;
-
-credit.onclick = () => {
-  creditClicks++;
-
-  if (creditClicks == 3)
-    credit.innerText = "why are you still clicking this?";
-
-  if (creditClicks == 4)
-    credit.innerText = "you really have too much free time.";
-};
-  document.addEventListener("contextmenu", e => {
-  e.preventDefault();
-  alert("No.");
-});
   const steps = document.getElementById("steps");
 let stepClicks = 0;
 steps.onclick = () => {
@@ -251,6 +235,15 @@ document.body.onclick = e => {
   }
 };
   document.getElementById("dont").title = "you probably shouldn't";
+const credit = document.getElementById("credit");
+let creditClicks = 0;
+credit.onclick = () => {
+  creditClicks++;
+  if (creditClicks == 3)
+    credit.innerText = "why are you still clicking this?";
+  if (creditClicks == 4)
+    credit.innerText = "you really have too much free time.";
+};
 </script>
   <p id="credit">made by johan. he had free time.</p>
 </body>
