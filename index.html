@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      background-color: black;
-      color: white;
-      font-size: 18px;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+  min-height: 100vh;
     }
     h1 {
       text-align: center;
@@ -226,15 +227,15 @@ closeBtn.onclick = () => {
   }, 400);
 };
   let emptyClicks = 0;
-document.body.onclick = e => {
-  if (e.target == document.body) {
+document.addEventListener("click", e => {
+  if (e.target === document.body) {
     emptyClicks++;
     if (emptyClicks == 5) {
       alert("There is literally nothing here.");
       emptyClicks = 0;
     }
   }
-};
+});
   document.getElementById("dont").title = "you probably shouldn't";
 const credit = document.getElementById("credit");
 let creditClicks = 0;
