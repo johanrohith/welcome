@@ -60,26 +60,33 @@
   <p id="message"></p>
 </div>
 <script>
-  close.onclick = () => {
-    close.innerText = "×";
+  const closeBtn = document.getElementById("close");
+  const stopBtn = document.getElementById("stop");
+  const startBtn = document.getElementById("start");
+  const game = document.getElementById("game");
+  const play = document.getElementById("play");
+  const message = document.getElementById("message");
+  closeBtn.onclick = () => {
     document.querySelector("h1").innerText = "Nice try.";
     setTimeout(() => location.reload(), 1000);
   };
-  stop.onclick = () => {
-    document.body.style.fontFamily = "monospace";
-    document.body.innerHTML = document.body.innerHTML.replace(/[a-zA-Z]/g, "§");
+  stopBtn.onclick = () => {
+    const elements = document.body.querySelectorAll("*");
+    elements.forEach(e => {
+      if (e.children.length === 0)
+        e.innerText = e.innerText.replace(/[a-zA-Z]/g, "§");
+    });
     setTimeout(() => location.reload(), 3000);
   };
-  start.onclick = () => {
+  startBtn.onclick = () => {
     game.style.display = "block";
-    start.style.display = "none";
+    startBtn.style.display = "none";
   };
   function choose(moves, level) {
     let count = 0;
     play.style.display = "inline-block";
     play.innerText = "CLICK ME";
     message.innerText = "";
-
     play.onclick = () => {
       if (count < moves) {
         count++;
@@ -88,17 +95,19 @@
         play.style.top = Math.random() * 100 - 50 + "px";
       } else {
         play.style.display = "none";
-
+        
         if (level == "Easy")
-          message.innerText = "Not bad... but Medium might be more fun.";
+          message.innerText =
+            "Not bad... but Medium might be more fun.";
         if (level == "Medium")
-          message.innerText = "Okay, you're getting good at this. Try Hard.";
+          message.innerText =
+            "Okay, you're getting good at this. Try Hard.";
         if (level == "Hard")
-          message.innerText = "You actually beat Hard. There's another option... but I wouldn't recommend it.";
+          message.innerText =
+            "You actually beat Hard. There's another option... but I wouldn't recommend it.";
       }
     };
   }
-
   function dontChoose() {
     if (confirm("⚠️ Are you absolutely sure?")) {
       alert("You were warned.");
