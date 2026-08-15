@@ -3,19 +3,16 @@
 <head>
   <title>Welcome</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <style>
     body {
-      background: black;
+      background-color: black;
       color: white;
       font-size: 18px;
     }
-
     h1 {
       text-align: center;
       cursor: pointer;
     }
-
     button {
       background: black;
       color: white;
@@ -23,7 +20,6 @@
       padding: 8px 12px;
       font-size: 16px;
     }
-
     #close {
       position: fixed;
       top: 10px;
@@ -31,285 +27,172 @@
       border: none;
       font-size: 22px;
     }
-
     #game {
       display: none;
       text-align: center;
     }
-
     #difficulty button {
       margin: 5px;
     }
-
     #play {
       margin-top: 20px;
       display: none;
     }
-
-    #step2 {
+    #step2, #why {
       cursor: pointer;
     }
   </style>
 </head>
-
 <body>
-
 <button id="close">×</button>
-
 <h1 id="title">Welcome to My Website!</h1>
-
-<p>why are you here</p>
-
+<p id="why">why are you here</p>
 <p>Here are the steps you should do:</p>
-
 <ul>
   <li>Step 1: Close this website, the button is on top right</li>
-
   <li>Step 2: <span id="step2">Do step 1</span></li>
-
-  <li>
-    Step 3: Stop reading
-    <button id="stop">Stop</button>
-  </li>
-
-  <li>
-    Step 4:
-    <button id="start">Play my Game</button>
-  </li>
+  <li>Step 3: Stop reading <button id="stop">Stop</button></li>
+  <li>Step 4: <button id="start">Play my Game</button></li>
 </ul>
-
-
 <div id="game">
-
   <h2>Reaction Test</h2>
-
   <p>Choose your difficulty:</p>
-
   <div id="difficulty">
-
     <button onclick="choose(2, 'Easy')">Easy</button>
-
     <button onclick="choose(3, 'Medium')">Medium</button>
-
     <button onclick="choose(4, 'Hard')">Hard</button>
-
     <button onclick="dontChoose()">Don't Choose</button>
-
   </div>
-
   <button id="play">CLICK ME</button>
-
   <p id="message"></p>
-
 </div>
-
-
 <script>
-
-  const closeBtn = document.getElementById("close");
-  const stopBtn = document.getElementById("stop");
-  const startBtn = document.getElementById("start");
-  const game = document.getElementById("game");
-  const play = document.getElementById("play");
-  const message = document.getElementById("message");
-  const step2 = document.getElementById("step2");
-  const title = document.getElementById("title");
-
-  let dontCount = 0;
-  let titleClicks = 0;
-
-
-  // CLOSE BUTTON
-
-  function closeWebsite() {
-
-    document.body.querySelectorAll(
-      "body > *:not(#close)"
-    ).forEach(e => {
-      e.style.display = "none";
+const closeBtn = document.getElementById("close");
+const stopBtn = document.getElementById("stop");
+const startBtn = document.getElementById("start");
+const game = document.getElementById("game");
+const play = document.getElementById("play");
+const message = document.getElementById("message");
+const step2 = document.getElementById("step2");
+const title = document.getElementById("title");
+const why = document.getElementById("why");
+let dontCount = 0, titleClicks = 0, whyClicks = 0, loading = false, gameOpened = false;
+function changeTitle(text) {
+  document.title = text;
+}
+function closeWebsite() {
+  changeTitle("Nice try.");
+  document.body.querySelectorAll("body > *:not(#close)").forEach(e => e.style.display = "none");
+  const msg = document.createElement("h1");
+  msg.innerText = "Nice try.";
+  msg.id = "niceTry";
+  document.body.appendChild(msg);
+  setTimeout(() => location.reload(), 3000);
+}
+closeBtn.onclick = closeWebsite;
+step2.onclick = closeWebsite;
+stopBtn.onclick = () => {
+  const symbols = "!@#$%^&*§¥Æ¤øß≠÷×±~<>?/\\|{}[]";
+  const originals = [];
+  function scramble(element) {
+    element.childNodes.forEach(node => {
+      if (node.nodeType === 3 && node.textContent.trim()) {
+        originals.push([node, node.textContent]);
+        node.textContent = [...node.textContent].map(c =>
+          c === " " || c === "\n" ? c : symbols[Math.floor(Math.random() * symbols.length)]
+        ).join("");
+      } else if (node.nodeType === 1) {
+        scramble(node);
+      }
     });
-
-    const msg = document.createElement("h1");
-
-    msg.innerText = "Nice try.";
-    msg.id = "niceTry";
-
-    document.body.appendChild(msg);
-
-    setTimeout(() => {
-      location.reload();
-    }, 3000);
   }
-
-  closeBtn.onclick = closeWebsite;
-
-
-  // STEP 2
-
-  step2.onclick = closeWebsite;
-
-
-  // STEP 3
-
-  stopBtn.onclick = () => {
-
-    const symbols =
-      "!@#$%^&*§¥Æ¤øß≠÷×±~<>?/\\|{}[]";
-
-    const originals = [];
-
-    function scramble(element) {
-
-      element.childNodes.forEach(node => {
-
-        if (node.nodeType === 3 && node.textContent.trim()) {
-
-          originals.push([node, node.textContent]);
-
-          node.textContent = [...node.textContent]
-            .map(c =>
-              c === " " || c === "\n"
-                ? c
-                : symbols[
-                    Math.floor(
-                      Math.random() * symbols.length
-                    )
-                  ]
-            )
-            .join("");
-
-        } else if (node.nodeType === 1) {
-
-          scramble(node);
-
-        }
-
-      });
-
-    }
-
-    scramble(document.body);
-
-    setTimeout(() => {
-
-      originals.forEach(([node, text]) => {
-        node.textContent = text;
-      });
-
-    }, 3000);
-
-  };
-
-
-  // PLAY GAME
-
-  startBtn.onclick = () => {
-
+  scramble(document.body);
+  changeTitle("§¥Æ¤ø");
+  setTimeout(() => {
+    originals.forEach(([node, text]) => node.textContent = text);
+    changeTitle("Welcome");
+  }, 3000);
+};
+why.onclick = () => {
+  whyClicks++;
+  if (whyClicks == 3) {
+    why.innerText = "I don't know either.";
+    changeTitle("Good question.");
+  }
+};
+title.onclick = () => {
+  titleClicks++;
+  if (titleClicks >= 4) {
+    title.innerText = "Stop clicking me.";
+    changeTitle("Stop.");
+  }
+};
+startBtn.onclick = () => {
+  if (gameOpened) {
     game.style.display = "block";
     startBtn.style.display = "none";
-
-  };
-
-
-  // REACTION TEST
-
-  function choose(moves, level) {
-
-    let count = 0;
-
-    play.style.display = "inline-block";
-    play.innerText = "CLICK ME";
-    message.innerText = "";
-
-    play.onclick = () => {
-
-      if (count < moves) {
-
-        count++;
-
-        play.style.position = "relative";
-
-        play.style.left =
-          Math.random() * 150 - 75 + "px";
-
-        play.style.top =
-          Math.random() * 100 - 50 + "px";
-
-      } else {
-
-        play.style.display = "none";
-
-
-        if (level == "Easy")
-
-          message.innerText =
-            "Not bad... but Medium might be more fun.";
-
-
-        if (level == "Medium")
-
-          message.innerText =
-            "Okay, you're getting good at this. Try Hard.";
-
-
-        if (level == "Hard")
-
-          message.innerText =
-            "You actually beat Hard. There's another option... but I wouldn't recommend it.";
-
-      }
-
-    };
-
+    return;
   }
-
-
-  // DON'T CHOOSE
-
-  function dontChoose() {
-
-    dontCount++;
-
-    if (dontCount == 1) {
-
-      if (confirm("⚠️ Are you absolutely sure?")) {
-
-        alert("You were warned.");
-
-        location.href =
-          "https://youtu.be/dQw4w9WgXcQ";
-
-      }
-
+  if (loading) {
+    startBtn.innerText = "What? You thought it's loading for this long dummy?";
+    changeTitle("Dummy.");
+    setTimeout(() => {
+      startBtn.style.display = "none";
+      game.style.display = "block";
+      gameOpened = true;
+      loading = false;
+      changeTitle("Reaction Test");
+    }, 3000);
+    return;
+  }
+  loading = true;
+  startBtn.innerText = "Loading...";
+  changeTitle("Loading...");
+  if (Math.random() < 0.5) return;
+  setTimeout(() => {
+    startBtn.style.display = "none";
+    game.style.display = "block";
+    gameOpened = true;
+    loading = false;
+    changeTitle("Reaction Test");
+  }, 2000);
+};
+function choose(moves, level) {
+  let count = 0;
+  play.style.display = "inline-block";
+  play.innerText = "CLICK ME";
+  message.innerText = "";
+  play.onclick = () => {
+    if (count < moves) {
+      count++;
+      play.style.position = "relative";
+      play.style.left = Math.random() * 150 - 75 + "px";
+      play.style.top = Math.random() * 100 - 50 + "px";
     } else {
-
-      if (confirm("I said dont.\n\n⚠️ Are you absolutely sure?")) {
-
-        alert("You were warned.");
-
-        location.href =
-          "https://youtu.be/dQw4w9WgXcQ";
-
-      }
-
+      play.style.display = "none";
+      if (level == "Easy")
+        message.innerText = "Not bad... but Medium might be more fun.";
+      if (level == "Medium")
+        message.innerText = "Okay, you're getting good at this. Try Hard.";
+      if (level == "Hard")
+        message.innerText = "You actually beat Hard. There's another option... but I wouldn't recommend it.";
     }
-
-  }
-
-
-  // WELCOME TITLE
-
-  title.onclick = () => {
-
-    titleClicks++;
-
-    if (titleClicks >= 4) {
-      title.innerText = "Stop clicking me.";
-    }
-
   };
-
+}
+function dontChoose() {
+  dontCount++;
+  if (dontCount == 1) {
+    if (confirm("⚠️ Are you absolutely sure?")) {
+      alert("You were warned.");
+      location.href = "https://youtu.be/dQw4w9WgXcQ";
+    }
+  } else {
+    if (confirm("I said dont.\n\n⚠️ Are you absolutely sure?")) {
+      alert("You were warned.");
+      location.href = "https://youtu.be/dQw4w9WgXcQ";
+    }
+  }
+}
 </script>
-
 </body>
 </html>
