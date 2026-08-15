@@ -1,77 +1,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> Welcome </title>
+  <title>Welcome</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-size: 18px;
+    }
+    h1 { text-align: center; }
+    button {
+      background: black;
+      color: white;
+      border: 1px solid white;
+      padding: 8px 12px;
+      font-size: 16px;
+    }
+    #game {
+      display: none;
+      text-align: center;
+    }
+    #difficulty button {
+      margin: 5px;
+    }
+    #play {
+      margin-top: 20px;
+    }
+    #close {
+      position: fixed;
+      top: 10px;
+      right: 15px;
+      border: none;
+      font-size: 22px;
+    }
+  </style>
 </head>
-<style>
-body {
-  background-color: black;
-}
-
-h1 {
-        color: #ffffff;
-        text-align: center;
-      }
-
-li {
-    color: #ffffff;
-}
-
-.dropbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
-
-</style>
 <body>
-  <h1>Welcome to My Website!</h1>
-  <p class="first-text">why are you here</p>
-  <p class="text">Here are the steps you should dow:</p>
-  <ul>
-    <li>Step 1: close this website</li>
-    <li>Step 2: Do step 1</li>
-    <li>Step 3: Stop</li>
-    <li>Step 4: Play my game</li>
-
-<div class="dropdown">
-  <button class="dropbtn">Difficulty</button>
-  <div class="dropdown-content">
-    <a href="#">Easy</a>
-    <a href="#">Medium</a>
-    <a href="#">Hard</a>
-    <a href="https://youtu.be/dQw4w9WgXcQ">Don't Click</a>
+<button id="close">X</button>
+<h1>Welcome to My Website!</h1>
+<p>why are you here?</p>
+<p>Here are the steps you should do:</p>
+<ul>
+  <li>Step 1: Close this website, the button is on top right</li>
+  <li>Step 2: Do step 1</li>
+  <li>Step 3: Stop reading <button id="stop">Stop</button></li>
+  <li>Step 4: <button id="start">Play my Game</button></li>
+</ul>
+<div id="game">
+  <h2>Reaction Test</h2>
+  <p>Choose your difficulty:</p>
+  <div id="difficulty">
+    <button onclick="choose(2,'Easy')">Easy</button>
+    <button onclick="choose(3,'Medium')">Medium</button>
+    <button onclick="choose(4,'Hard')">Hard</button>
+    <button onclick="dontChoose()">Don't Choose</button>
   </div>
+  <button id="play" style="display:none"></button>
+  <p id="message"></p>
 </div>
+<script>
+  close.onclick = () => {
+    close.innerText = "×";
+    document.querySelector("h1").innerText = "Nice try.";
+    setTimeout(() => location.reload(), 1000);
+  };
+  stop.onclick = () => {
+    document.body.style.fontFamily = "monospace";
+    document.body.innerHTML = document.body.innerHTML.replace(/[a-zA-Z]/g, "§");
+    setTimeout(() => location.reload(), 3000);
+  };
+  start.onclick = () => {
+    game.style.display = "block";
+    start.style.display = "none";
+  };
+  function choose(moves, level) {
+    let count = 0;
+    play.style.display = "inline-block";
+    play.innerText = "CLICK ME";
+    message.innerText = "";
 
+    play.onclick = () => {
+      if (count < moves) {
+        count++;
+        play.style.position = "relative";
+        play.style.left = Math.random() * 150 - 75 + "px";
+        play.style.top = Math.random() * 100 - 50 + "px";
+      } else {
+        play.style.display = "none";
+
+        if (level == "Easy")
+          message.innerText = "Not bad... but Medium might be more fun.";
+        if (level == "Medium")
+          message.innerText = "Okay, you're getting good at this. Try Hard.";
+        if (level == "Hard")
+          message.innerText = "You actually beat Hard. There's another option... but I wouldn't recommend it.";
+      }
+    };
+  }
+
+  function dontChoose() {
+    if (confirm("⚠️ Are you absolutely sure?")) {
+      alert("You were warned.");
+      location.href = "https://youtu.be/dQw4w9WgXcQ";
+    }
+  }
+</script>
 </body>
 </html>
