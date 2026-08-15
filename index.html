@@ -5,17 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      background: black;
+      background-color: black;
       color: white;
       font-size: 18px;
     }
-    h1 { text-align: center; }
+    h1 {
+      text-align: center;
+    }
     button {
       background: black;
       color: white;
       border: 1px solid white;
       padding: 8px 12px;
       font-size: 16px;
+    }
+    #close {
+      position: fixed;
+      top: 10px;
+      right: 15px;
+      border: none;
+      font-size: 22px;
     }
     #game {
       display: none;
@@ -26,37 +35,37 @@
     }
     #play {
       margin-top: 20px;
-    }
-    #close {
-      position: fixed;
-      top: 10px;
-      right: 15px;
-      border: none;
-      font-size: 22px;
+      display: none;
     }
   </style>
 </head>
 <body>
-<button id="close">X</button>
+<button id="close">×</button>
 <h1>Welcome to My Website!</h1>
-<p>why are you here?</p>
+<p>why are you here</p>
 <p>Here are the steps you should do:</p>
 <ul>
   <li>Step 1: Close this website, the button is on top right</li>
   <li>Step 2: Do step 1</li>
-  <li>Step 3: Stop reading <button id="stop">Stop</button></li>
-  <li>Step 4: <button id="start">Play my Game</button></li>
+  <li>
+    Step 3: Stop reading
+    <button id="stop">Stop</button>
+  </li>
+  <li>
+    Step 4:
+    <button id="start">Play my Game</button>
+  </li>
 </ul>
 <div id="game">
   <h2>Reaction Test</h2>
   <p>Choose your difficulty:</p>
   <div id="difficulty">
-    <button onclick="choose(2,'Easy')">Easy</button>
-    <button onclick="choose(3,'Medium')">Medium</button>
-    <button onclick="choose(4,'Hard')">Hard</button>
+    <button onclick="choose(2, 'Easy')">Easy</button>
+    <button onclick="choose(3, 'Medium')">Medium</button>
+    <button onclick="choose(4, 'Hard')">Hard</button>
     <button onclick="dontChoose()">Don't Choose</button>
   </div>
-  <button id="play" style="display:none"></button>
+  <button id="play">CLICK ME</button>
   <p id="message"></p>
 </div>
 <script>
@@ -67,16 +76,41 @@
   const play = document.getElementById("play");
   const message = document.getElementById("message");
   closeBtn.onclick = () => {
-    document.querySelector("h1").innerText = "Nice try.";
-    setTimeout(() => location.reload(), 1000);
+    document.body.querySelectorAll(
+      "body > *:not(#close)"
+    ).forEach(e => {
+      e.style.display = "none";
+    });
+    closeBtn.innerText = "×";
+    const msg = document.createElement("h1");
+    msg.id = "niceTry";
+    msg.innerText = "Nice try.";
+    document.body.appendChild(msg);
+    setTimeout(() => {
+      location.reload();
+    }, 3000);
   };
   stopBtn.onclick = () => {
-    const elements = document.body.querySelectorAll("*");
-    elements.forEach(e => {
-      if (e.children.length === 0)
-        e.innerText = e.innerText.replace(/[a-zA-Z]/g, "§");
+    const symbols =
+      "!@#$%^&*§¥[Æ¤}øß≠/÷×±~<>?/|{]";
+    const text = document.body.querySelectorAll(
+      "h1, p, li, button, h2"
+    );
+    text.forEach(e => {
+      e.dataset.original = e.innerText;
+      e.innerText = [...e.innerText]
+        .map(c =>
+          c === " "
+            ? " "
+            : symbols[Math.floor(Math.random() * symbols.length)]
+        )
+        .join("");
     });
-    setTimeout(() => location.reload(), 3000);
+    setTimeout(() => {
+      text.forEach(e => {
+        e.innerText = e.dataset.original;
+      });
+    }, 3000);
   };
   startBtn.onclick = () => {
     game.style.display = "block";
@@ -91,11 +125,13 @@
       if (count < moves) {
         count++;
         play.style.position = "relative";
-        play.style.left = Math.random() * 150 - 75 + "px";
-        play.style.top = Math.random() * 100 - 50 + "px";
-      } else {
+        play.style.left =
+          Math.random() * 150 - 75 + "px";
+        play.style.top =
+          Math.random() * 100 - 50 + "px";
+      }
+      else {
         play.style.display = "none";
-        
         if (level == "Easy")
           message.innerText =
             "Not bad... but Medium might be more fun.";
@@ -111,7 +147,8 @@
   function dontChoose() {
     if (confirm("⚠️ Are you absolutely sure?")) {
       alert("You were warned.");
-      location.href = "https://youtu.be/dQw4w9WgXcQ";
+      location.href =
+        "https://youtu.be/dQw4w9WgXcQ";
     }
   }
 </script>
