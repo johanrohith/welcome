@@ -90,28 +90,37 @@
       location.reload();
     }, 3000);
   };
-  stopBtn.onclick = () => {
-    const symbols =
-      "!@#$%^&*§¥[Æ¤}øß≠/÷×±~<>?/|{]";
-    const text = document.body.querySelectorAll(
-      "h1, p, li, button, h2"
-    );
-    text.forEach(e => {
-      e.dataset.original = e.innerText;
-      e.innerText = [...e.innerText]
-        .map(c =>
-          c === " "
-            ? " "
-            : symbols[Math.floor(Math.random() * symbols.length)]
-        )
-        .join("");
+  
+  // STEP 3
+
+stopBtn.onclick = () => {
+  const symbols = "!@#$%^&*§¥Æ¤øß≠÷×±~<>?/\\|{}[]";
+  const originals = [];
+  function scramble(element) {
+    element.childNodes.forEach(node => {
+      if (node.nodeType === 3 && node.textContent.trim()) {
+        originals.push([node, node.textContent]);
+        node.textContent = [...node.textContent]
+          .map(c =>
+            c === " " || c === "\n"
+              ? c
+              : symbols[Math.floor(Math.random() * symbols.length)]
+          )
+          .join("");
+      }
+      else if (node.nodeType === 1) {
+        scramble(node);
+      }
     });
-    setTimeout(() => {
-      text.forEach(e => {
-        e.innerText = e.dataset.original;
-      });
-    }, 3000);
-  };
+  }
+  scramble(document.body);
+  setTimeout(() => {
+    originals.forEach(([node, text]) => {
+      node.textContent = text;
+    });
+  }, 3000);
+};
+  
   startBtn.onclick = () => {
     game.style.display = "block";
     startBtn.style.display = "none";
